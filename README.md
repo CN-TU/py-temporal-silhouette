@@ -1,5 +1,5 @@
-# Temporal Silhouette for Stream Clustering Validation
-## Instructions for experiment replication
+## Temporal Silhouette for Stream Clustering Validation
+### Instructions for experiment replication
 
 **author:** Félix Iglesias
 
@@ -13,7 +13,7 @@ The TS index and the experiments here implemented are from the paper:
 *Jun., 2022*
 
 
-### 0. Requirements
+#### 0. Requirements
 
 Experiments require the following general-purpose Python packages:
 
@@ -33,7 +33,7 @@ Stream clustering algoriths used are:
 - DenStream from [https://github.com/issamemari/DenStream](https://github.com/issamemari/DenStream)
 - CluStream and Streamkm from [https://github.com/giuliano-oliveira/clusopt_core](https://github.com/giuliano-oliveira/clusopt_core)
 
-### 1. Temporal Silhouette Index (TS)
+#### 1. Temporal Silhouette Index (TS)
 
 Use TS in your codes by importing the "tempsil" function:
 
@@ -57,7 +57,7 @@ For a simple example, open a terminal and run:
 
         > $ pyhton3 toy_tests.py
 
-### 1. Datasets
+#### 1. Datasets
 
 **Datasets** are located within the [data] folder. They are also publicly available in **Mendeley**: 
 
@@ -65,7 +65,7 @@ For a simple example, open a terminal and run:
 
 The *clean* (without outliers) versions and the versions with *out-of-phase* outliers are created online during the runing of the experiments
 
-### 2. Replicating experiments
+#### 2. Replicating experiments
 
 Open a terminal in the current folder. Run:
 
@@ -75,7 +75,7 @@ A *results.csv* file will be created in the [results/] folder.
 
 Once experiments finish, to show a comparison among internal validity indices, run...
 
-### 3. Comparing performances of internal validation indices
+#### 3. Comparing performances of internal validation indices
 
 For a comparison with the Ground Truth (GT) as benchmark: 
 
