@@ -71,7 +71,7 @@ Open a terminal in the current folder. Run:
 
         > $ pyhton3 run_analysis.py
 
-A *results.csv* file will be created in the [results/] folder.
+A *results.csv* file will be created in the [results/] folder. Note that there is already a "results.csv" file inside this folder, which corresponds to the published experiments and is obtained by running the script above.
 
 Once experiments finish, to show a comparison among internal validity indices, run...
 
