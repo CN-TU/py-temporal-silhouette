@@ -63,7 +63,7 @@ def tempsil(t,x,l,s=200,kn=200,c=1):
         a = np.zeros(len(SMA))
         b = np.zeros(len(SMA))
         for j in range(len(SMA)-1):
-            a[j] = 2*distance.euclidean(xk[j],SMA[j])
+            a[j] = 2 * distance.euclidean(xk[j],SMA[j])
             tst[j] = 0
             if len(wnt)>0:
                 m = find_knearest(wnt,wj[j],kn,option='nearest')

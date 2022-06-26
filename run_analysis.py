@@ -80,7 +80,7 @@ def get_centroids(x,l):
 
 def add_oop_outliers(x,l,r):
     oop_outs_i = np.random.permutation(np.arange(len(l)))[:int(r*len(l))]
-    a=np.zeros(len(l))
+    a = np.zeros(len(l))
     cmed, cstd = get_centroids(x,l)
     k = np.unique(l)
     pos = np.ones((len(l),len(k)))
@@ -232,7 +232,7 @@ for idf, filename in enumerate(glob.glob(os.path.join(inpath, '*.arff'))):
             Sil, CH, DB = 0, 0, np.inf
 
         _,coeff, TS = tempsil(timestamps,data,y,s=200,kn=500,c=1)
-        
+
         df = df.append({'filename':filename, 'group':group, 'outliers': rm_outliers, 'idf':idf, 'algorithm':alg_name, 'AMI':AMI, 'Sil':Sil, 'CH':CH, 'DB':DB, 'TS':TS}, ignore_index=True)
         print(df.tail(1))
 
