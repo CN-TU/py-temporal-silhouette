@@ -10,7 +10,7 @@ The TS index and the experiments here implemented are from the paper:
 
 *Temporal Silhouette: Validation of Stream Clustering Robust to Concept Drift* (under review...)
 
-*Jun., 2022*
+*Jul., 2022*
 
 
 ### 0. Requirements
