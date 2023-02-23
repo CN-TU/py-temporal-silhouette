@@ -12,6 +12,8 @@ The TS index and the experiments here implemented are from the paper:
 
 *Feb., 2023*
 
+If you use Temporal Silhouette and/or the experiments described here, please cite the repository and the paper (when published).
+
 
 ### 0. Requirements
 
