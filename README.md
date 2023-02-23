@@ -87,7 +87,7 @@ For the real data, open a terminal in the current folder. Run:
 
 Three files (*covid_labels.csv*, *results_real.csv* and *retail_labels.csv*) will be created in the [results/] folder.
 
-Note that there are already some files with results inside this folder, which corresponds to the published experiments and are obtained by running the scripts above.
+**Warning!** The [results/] folder already contain files with the results published in the paper. Running the scripts will overwrite these files.
 
 ### 4. Comparing performances of internal validation indices
 
