@@ -150,7 +150,7 @@ for idf, filename in enumerate(glob.glob(os.path.join(inpath, '*.arff'))):
 
     timestamps = np.arange(data.shape[0])
 
-    k = len(np.unique(labels)) # outliers are expected to be labelled as -1
+    k = len(np.unique(labels)) 
     cls = CluStream(m=k*5, h=1000, t=2)
     stk = Streamkm(coresetsize=k * 10, length=5000, seed=42)
     den = DenStream(eps=0.2, lambd=0.1, beta=0.1, mu=11)
