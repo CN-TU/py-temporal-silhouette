@@ -33,6 +33,12 @@ Stream clustering algoriths used are:
 - DenStream from [https://github.com/issamemari/DenStream](https://github.com/issamemari/DenStream)
 - CluStream and Streamkm from [https://github.com/giuliano-oliveira/clusopt_core](https://github.com/giuliano-oliveira/clusopt_core)
 
+Real dataset sources are:
+
+- HealthData.gov - COVID-19 Estimated ICU Beds Occupied by State Timeseries: [https://healthdata.gov/dataset/COVID-19-Estimated-ICU-Beds-Occupied-by-State-Time/7ctx-gtb7](https://healthdata.gov/dataset/COVID-19-Estimated-ICU-Beds-Occupied-by-State-Time/7ctx-gtb7)
+- kaggle - Retail and Retailers Sales Time Series Collection: 
+[https://www.kaggle.com/datasets/census/retail-and-retailers-sales-time-series-collection](https://www.kaggle.com/datasets/census/retail-and-retailers-sales-time-series-collection)
+
 ### 1. Temporal Silhouette Index (TS)
 
 Use TS in your codes by importing the "tempsil" function:
