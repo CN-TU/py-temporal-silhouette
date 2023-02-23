@@ -95,6 +95,7 @@ for i, alg in enumerate(algorithms):
         ax.set_xticklabels(labels=groups,rotation=45, fontsize=14)
         plt.title(alg, fontsize=18, y=1)
 
-plt.show()
 #plt.savefig("boxplots.pdf")
+plt.show()
+
 

@@ -14,10 +14,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.metrics.cluster import adjusted_mutual_info_score
 from TSindex import tempsil
 from scipy.spatial import distance_matrix
 from sklearn.datasets import make_blobs, make_classification
+import sys
+
+c  = int(sys.argv[1])
 
 def get_label(A,C):
     M = distance_matrix(A,C)
@@ -223,8 +225,8 @@ def make_data(case):
     t = np.arange(len(y))
     return X,y,t
 
-def evaluate(t,X,y,text):
-    _,c,ts = tempsil(t,X,y,s=100,kn=200,c=1)
+def evaluate(t,X,y,c,text):
+    _,c,ts = tempsil(t,X,y,s=100,kn=200,c=c)
     print("%s TS: %.3f" % (text, ts))
 
 
@@ -235,56 +237,56 @@ fig, axs = init_plots()
 print("1. Sudden drift")
 X,y,t = make_data(1)
 # case A
-evaluate(t,X,y,"Case A (3 clusters) -")
+evaluate(t,X,y,c,"Case A (3 clusters) -")
 plot_scatter(axs, 0, t, X, y)
 # case B
 y[y==3]=2
-evaluate(t,X,y,"Case B (2 clusters) -")
+evaluate(t,X,y,c,"Case B (2 clusters) -")
 plot_scatter(axs, 6, t, X, y)
 
 # 2. Incremental drift
 print("\n2. Incremental drift")
 X,y,t = make_data(2)
 # case A
-evaluate(t,X,y,"Case A (3 clusters) -")
+evaluate(t,X,y,c,"Case A (3 clusters) -")
 plot_scatter(axs, 1, t, X, y)
 # case B
 y[y==3]=1
-evaluate(t,X,y,"Case B (2 clusters) -")
+evaluate(t,X,y,c,"Case B (2 clusters) -")
 plot_scatter(axs, 7, t, X, y)
 
 # 3. Gradual drift
 print("\n3. Gradual drift")
 X,y,t = make_data(3)
 # case A
-evaluate(t,X,y,"Case A (3 clusters) -")
+evaluate(t,X,y,c,"Case A (3 clusters) -")
 plot_scatter(axs, 2, t, X, y)
 # case B
 y[y==3]=2
-evaluate(t,X,y,"Case B (2 clusters) -")
+evaluate(t,X,y,c,"Case B (2 clusters) -")
 plot_scatter(axs, 8, t, X, y)
 
 # 4. Reoccuring concepts
 print("\n4. Reoccuring concepts")
 X,y,t = make_data(4)
 # case A
-evaluate(t,X,y,"Case A (3 clusters) -")
+evaluate(t,X,y,c,"Case A (3 clusters) -")
 plot_scatter(axs, 3, t, X, y)
 # case B
 y[y==3]=2
-evaluate(t,X,y,"Case B (2 clusters) -")
+evaluate(t,X,y,c,"Case B (2 clusters) -")
 plot_scatter(axs, 9, t, X, y)
 
 # 5. Outliers: local and extreme
 print("\n5. Spatial outliers: local and extreme")
 X,y,t = make_data(5)
 # case A
-evaluate(t,X,y,"Case A (2 clusters + outliers) -")
+evaluate(t,X,y,c,"Case A (2 clusters + outliers) -")
 plot_scatter(axs, 4, t, X, y)
 # case B
 X1mu, X2mu = np.mean(X[y==1]), np.mean(X[y==2])
 y = get_label(X,[[X1mu],[X2mu]]) + 1
-evaluate(t,X,y,"Case A (2 clusters) -")
+evaluate(t,X,y,c,"Case A (2 clusters) -")
 plot_scatter(axs, 10, t, X, y)
 
 
@@ -292,13 +294,15 @@ plot_scatter(axs, 10, t, X, y)
 print("\n6. Temporal outliers: out-of-phase")
 X,y,t = make_data(6)
 # case A
-evaluate(t,X,y,"Case A (3 clusters + outliers) -")
+evaluate(t,X,y,c,"Case A (3 clusters + outliers) -")
 plot_scatter(axs, 5, t, X, y)
 # case B
 X1mu, X2mu, X3mu = np.mean(X[y==1]), np.mean(X[y==2]), np.mean(X[y==3])
 y = get_label(X,[[X1mu],[X2mu],[X3mu]]) + 1
-evaluate(t,X,y,"Case A (3 clusters) -")
+evaluate(t,X,y,c,"Case A (3 clusters) -")
 plot_scatter(axs, 11, t, X, y)
+
+print("\nTemporal Silhouette (TS) adjusted with sigma (c)=",c) 
 
 #fig.suptitle('Different types of concept drift and outliers (x-axis: time,  y-axis: 1D-data)', fontsize=16)
 plt.tight_layout()
