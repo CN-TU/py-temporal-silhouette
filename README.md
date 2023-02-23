@@ -43,9 +43,9 @@ Real dataset sources are:
 
 Use TS in your codes by importing the "tempsil" function:
 
-        > from TSindex import tempsil
+        from TSindex import tempsil
 
-        > tempsil(t,x,l,s,kn,c)
+        tempsil(t,x,l,s,kn,c)
         # INPUTS
         # t: 1D-array with timestamps
         # x: 2D-array with data vectors
@@ -61,7 +61,7 @@ Use TS in your codes by importing the "tempsil" function:
 
 For a simple example, open a terminal and run:
 
-        > $ python3 toy_tests.py c
+        $ python3 toy_tests.py c
 
 where "c" is a real number for the TS sigma parameter. In the paper, Section 4.6 uses this script for the examples, with c=1 and c=0.
 
@@ -77,13 +77,13 @@ The *clean* (without outliers) versions and the versions with *out-of-phase* out
 
 For the synthetic data, open a terminal in the current folder. Run:
 
-        > $ python3 run_analysis_synthetic.py
+        $ python3 run_analysis_synthetic.py
 
 A *results.csv* file will be created in the [results/] folder. 
 
 For the real data, open a terminal in the current folder. Run:
 
-        > $ python3 run_analysis_real.py
+        $ python3 run_analysis_real.py
 
 Three files (*covid_labels.csv*, *results_real.csv* and *retail_labels.csv*) will be created in the [results/] folder.
 
@@ -93,16 +93,16 @@ Note that there are already some files with results inside this folder, which co
 
 For a comparison with the Ground Truth (GT) as benchmark: 
 
-        > $ python3 compare_results.py results/results.csv gt
+        $ python3 compare_results.py results/results.csv gt
 
 For a comparison with the best clustering according to external validation (AMI) as benchmark: 
 
-        > $ python3 compare_results.py results/results.csv ami
+        $ python3 compare_results.py results/results.csv ami
 
 ### 5. Plotting peformances for real data cases
 
 To visualize performances of real data cases, run:
 
-        > $ python3 plots_retail.py dataR/retail.arff results/retail_labels.csv 
+        $ python3 plots_retail.py dataR/retail.arff results/retail_labels.csv 
 
-        > $ python3 plots_covid.py dataR/covid.arff results/covid_labels.csv 
+        $ python3 plots_covid.py dataR/covid.arff results/covid_labels.csv 
