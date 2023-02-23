@@ -33,11 +33,6 @@ Stream clustering algoriths used are:
 - DenStream from [https://github.com/issamemari/DenStream](https://github.com/issamemari/DenStream)
 - CluStream and Streamkm from [https://github.com/giuliano-oliveira/clusopt_core](https://github.com/giuliano-oliveira/clusopt_core)
 
-Real dataset sources are:
-
-- HealthData.gov - COVID-19 Estimated ICU Beds Occupied by State Timeseries: [https://healthdata.gov/dataset/COVID-19-Estimated-ICU-Beds-Occupied-by-State-Time/7ctx-gtb7](https://healthdata.gov/dataset/COVID-19-Estimated-ICU-Beds-Occupied-by-State-Time/7ctx-gtb7)
-- kaggle - Retail and Retailers Sales Time Series Collection: 
-[https://www.kaggle.com/datasets/census/retail-and-retailers-sales-time-series-collection](https://www.kaggle.com/datasets/census/retail-and-retailers-sales-time-series-collection)
 
 ### 1. Temporal Silhouette Index (TS)
 
@@ -67,11 +62,18 @@ where "c" is a real number for the TS sigma parameter. In the paper, Section 4.6
 
 ### 2. Datasets
 
-**Datasets** are located within the [data] folder. They are also publicly available in **Mendeley**: 
+**Synthetic datasets** are located within the [dataS] folder. They are also publicly available in **Mendeley**: 
 
 “Data for Evaluation of Stream Data Analysis Algorithms”. Mendeley Data, V1, doi: 10.17632/c43kr4t7h8.1, [https://data.mendeley.com/datasets/c43kr4t7h8/1](https://data.mendeley.com/datasets/c43kr4t7h8/1)
 
 The *clean* (without outliers) versions and the versions with *out-of-phase* outliers are created online during the runing of the experiments
+
+**Real datasets** are located within the [dataR] folder (they are preprocessed versions in arff format). Original data has been obtained from:
+
+- HealthData.gov - COVID-19 Estimated ICU Beds Occupied by State Timeseries: [https://healthdata.gov/dataset/COVID-19-Estimated-ICU-Beds-Occupied-by-State-Time/7ctx-gtb7](https://healthdata.gov/dataset/COVID-19-Estimated-ICU-Beds-Occupied-by-State-Time/7ctx-gtb7)
+- kaggle - Retail and Retailers Sales Time Series Collection: 
+[https://www.kaggle.com/datasets/census/retail-and-retailers-sales-time-series-collection](https://www.kaggle.com/datasets/census/retail-and-retailers-sales-time-series-collection)
+
 
 ### 3. Replicating experiments
 
