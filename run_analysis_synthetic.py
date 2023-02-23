@@ -132,8 +132,9 @@ df_columns=['filename','group','outliers','idf','algorithm','AMI','Sil','CH','DB
 df = pd.DataFrame(columns=df_columns)
 pd.set_option('display.float_format', '{:.10f}'.format)
 
-outfile = outpath + "results.csv"
-df.to_csv(outfile, sep=',')
+outfile = outpath + "results_synthetic.csv"
+if exists(outfile) == False:
+    df.to_csv(outfile, sep=',')
 
 for idf, filename in enumerate(glob.glob(os.path.join(inpath, '*.arff'))):
     print("\nData file (.arff)", filename)

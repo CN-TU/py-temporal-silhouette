@@ -81,7 +81,7 @@ For the synthetic data, open a terminal in the current folder. Run:
 
         $ python3 run_analysis_synthetic.py
 
-A *results.csv* file will be created in the [results/] folder. 
+A *results_synthetic.csv* file will be created in the [results/] folder. 
 
 For the real data, open a terminal in the current folder. Run:
 
@@ -89,17 +89,17 @@ For the real data, open a terminal in the current folder. Run:
 
 Three files (*covid_labels.csv*, *results_real.csv* and *retail_labels.csv*) will be created in the [results/] folder.
 
-**Warning!** The [results/] folder already contain files with the results published in the paper. Running the scripts will overwrite these files.
+**Warning!** The [results/] folder already contain files with the results published in the paper. Remove, rename or copy these files in a different folder before running the scripts; otherwise, results will be appended in the synthetic case and overwriten in the real case.
 
 ### 4. Comparing performances of internal validation indices
 
 For a comparison with the Ground Truth (GT) as benchmark: 
 
-        $ python3 compare_results.py results/results.csv gt
+        $ python3 compare_results.py results/results_synthetic.csv gt
 
 For a comparison with the best clustering according to external validation (AMI) as benchmark: 
 
-        $ python3 compare_results.py results/results.csv ami
+        $ python3 compare_results.py results/results_synthetic.csv ami
 
 ### 5. Plotting peformances for real data cases
 
