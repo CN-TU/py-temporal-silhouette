@@ -1,16 +1,9 @@
 #!/usr/bin/env python3
-# FIV, Jun 2022
+# FIV, Jun 2023
 
-# install dependencies to a local subdirectory
-import dependencies
-dependencies.assert_pkgs({
-    'numpy': 'numpy',
-    'pandas': 'pandas',
-    'scipy': 'scipy',
-    'sklearn': 'scikit-learn',
-    'glob': 'glob3',
-    're': 'regex'
-})
+# checking package dependencies
+from dependencies import check_pkgs
+check_pkgs()
 
 from DenStream import DenStream
 # Repo for DenStream: https://github.com/issamemari/DenStream
@@ -18,7 +11,9 @@ from clusopt_core.cluster import CluStream, Streamkm
 # Repo for CluStream and StreamKM++: https://github.com/giuliano-oliveira/clusopt_core
 from sklearn.cluster import Birch
 
+import cvi
 from TSindex import tempsil
+import utils.bedtest as ub
 
 import numpy as np
 import pandas as pd
@@ -34,14 +29,13 @@ import ntpath
 from sklearn import metrics
 from scipy.io.arff import loadarff 
 from sklearn.metrics.cluster import adjusted_mutual_info_score
-from sklearn.preprocessing import MinMaxScaler
-from scipy.spatial import distance_matrix
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning) 
 
 # if no parameters are provided, the script will be run with these configurations
 DEFAULT_RUNS = '''
+dataS/sequential/arff results/ seq-p phase
 dataS/base/arff results/ base normal
 dataS/base/arff results/ base-r remove
 dataS/moving/arff results/ mov normal
@@ -51,57 +45,8 @@ dataS/nonstat/arff results/ nonst-r remove
 dataS/nonstat/arff results/ nonst-p phase
 dataS/sequential/arff results/ seq normal
 dataS/sequential/arff results/ seq-r remove
-dataS/sequential/arff results/ seq-p phase
 '''
 
-
-def update_cls(x,y):
-    A,B = np.copy(x),np.copy(y)
-    ind = np.zeros(A.shape[0])
-    M = distance_matrix(A,B)
-    for i in range(A.shape[0]):
-        a,b = np.unravel_index(np.nanargmin(M), np.array(M).shape)
-        ind[b] = a
-        M[a,:], M[:,b] = np.inf, np.inf
-    return ind.astype(int)
-
-def get_label(A,C):
-    M = distance_matrix(A,C)
-    return np.argmin(M, axis=1)
-
-def get_centroids(x,l):
-    k = np.unique(l)
-    c = np.zeros((len(k),x.shape[1]))
-    s = np.zeros((len(k),x.shape[1]))
-    for i,label in enumerate(k):
-        c[i,:] = np.nanmedian(x[l==label,:], axis=0)
-        s[i,:] = np.std(x[l==label,:],axis=0)
-    return c,s 
-
-def add_oop_outliers(x,l,r):
-    oop_outs_i = np.random.permutation(np.arange(len(l)))[:int(r*len(l))]
-    a = np.zeros(len(l))
-    cmed, cstd = get_centroids(x,l)
-    k = np.unique(l)
-    pos = np.ones((len(l),len(k)))
-    for i,label in enumerate(k):
-        pos[l==label,i]=0
-        if label != 0:
-            s = int(np.sum(pos[:,i])/20)
-            pos[:,i] = pd.Series(pos[:,i]).rolling(s,min_periods=1, center=True).mean().to_numpy().astype(int)
-        else:
-            pos[:,i] = 0
-
-    for i in oop_outs_i:
-        old_label = l[i]
-        if np.sum(pos[i,:]) > 0:
-            p = pos[i,:]/np.sum(pos[i,:])
-            new_label = np.random.choice(k, 1, p=p)  
-            new_label = new_label-1 if not 0 in k else new_label  
-            x[i,:] = cmed[new_label,:] + cstd[new_label,:]*(np.random.rand(1,cstd.shape[1])-0.5)
-            l[i] = 0
-
-    return x,l
 
 
 if len(sys.argv) < 2:
@@ -128,7 +73,7 @@ print("Remove outliers:",rm_outliers)
 os.makedirs(outpath, exist_ok=True)
 
 res = []
-df_columns=['filename','group','outliers','idf','algorithm','AMI','Sil','CH','DB','TS']
+df_columns=['filename','group','outliers','idf','algorithm','AMI','Sil','CH','DB','iXB','iPS','irCIP','TS']
 df = pd.DataFrame(columns=df_columns)
 pd.set_option('display.float_format', '{:.10f}'.format)
 
@@ -159,7 +104,7 @@ for idf, filename in enumerate(glob.glob(os.path.join(inpath, '*.arff'))):
     elif rm_outliers=='phase':
         data = data[labels!=0,:]
         labels = labels[labels!=0]
-        data, labels = add_oop_outliers(data, labels,0.01)
+        data, labels = ub.add_oop_outliers(data, labels,0.01)
 
     timestamps = np.arange(data.shape[0])
     print("Dataset shape:", data.shape)
@@ -179,11 +124,9 @@ for idf, filename in enumerate(glob.glob(os.path.join(inpath, '*.arff'))):
     grt = []
     algorithms = (("CluStream", cls),("DenStream", den),("BIRCH", bir),("StreamKM", stk),("GT", grt))
 
-
     old_clusters = []
     for alg_name, alg in algorithms:
 
-        #print("Algorithm:", alg_name)
         if alg_name == 'CluStream':
             alg.init_offline(data[:blocksize,:], seed=42)
 
@@ -197,9 +140,9 @@ for idf, filename in enumerate(glob.glob(os.path.join(inpath, '*.arff'))):
                 alg.partial_fit(chunk)
                 clusters, _ = alg.get_macro_clusters(k, seed=42)
                 if i!=0:
-                    ind = update_cls(clusters, old_clusters)
+                    ind = ub.update_cls(clusters, old_clusters)
                     clusters = clusters[ind,:]
-                y[i:(i+blocksize)] = get_label(chunk,clusters)
+                y[i:(i+blocksize)] = ub.get_label(chunk,clusters)
                 old_clusters = clusters
 
             elif alg_name == 'BIRCH':
@@ -209,10 +152,10 @@ for idf, filename in enumerate(glob.glob(os.path.join(inpath, '*.arff'))):
             elif alg_name == 'StreamKM':
                 alg.partial_fit(chunk)
                 if i!=0:
-                    ind = update_cls(clusters, old_clusters)
+                    ind = ub.update_cls(clusters, old_clusters)
                     clusters = clusters[ind,:]
                 clusters, _ = alg.get_final_clusters(k, seed=42)
-                y[i:(i+blocksize)] = get_label(chunk,clusters)
+                y[i:(i+blocksize)] = ub.get_label(chunk,clusters)
                 old_clusters = clusters
 
             elif alg_name == 'GT':
@@ -231,9 +174,20 @@ for idf, filename in enumerate(glob.glob(os.path.join(inpath, '*.arff'))):
         except:
             Sil, CH, DB = 0, 0, np.inf
 
-        _,coeff, TS = tempsil(timestamps,data,y,s=200,kn=500,c=1)
+        _,coeff, TS = tempsil(timestamps,data,y,s=100,kn=1000,c=1)
 
-        df = df.append({'filename':filename, 'group':group, 'outliers': rm_outliers, 'idf':idf, 'algorithm':alg_name, 'AMI':AMI, 'Sil':Sil, 'CH':CH, 'DB':DB, 'TS':TS}, ignore_index=True)
+        #incremental cvi
+        ixb, ips, cip = cvi.XB(), cvi.PS(), cvi.rCIP()
+        ixb_crit, ips_crit, cip_crit = np.zeros(len(y)),np.zeros(len(y)),np.zeros(len(y)) 
+        for ix in range(len(y)):
+            ixb_crit[ix] = ixb.get_cvi(data[ix, :], y[ix])   
+            ips_crit[ix] = ips.get_cvi(data[ix, :], y[ix])   
+            cip_crit[ix] = cip.get_cvi(data[ix, :], y[ix])   
+        iXB = np.nanmean(ixb_crit)
+        iPS = np.nanmean(ips_crit)
+        rCIP = np.nanmean(cip_crit)
+
+        df = df.append({'filename':filename, 'group':group, 'outliers': rm_outliers, 'idf':idf, 'algorithm':alg_name, 'AMI':AMI, 'Sil':Sil, 'CH':CH, 'DB':DB, 'iXB':iXB, 'iPS':iPS, 'irCIP':rCIP, 'TS':TS}, ignore_index=True)
         print(df.tail(1))
 
 print("Summary file:",outfile,"\n")

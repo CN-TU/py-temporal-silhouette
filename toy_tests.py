@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
+# FIV, Jun 2023
 
-# install dependencies to a local subdirectory
-import dependencies
-dependencies.assert_pkgs({
-    'numpy': 'numpy',
-    'pandas': 'pandas',
-    'scipy': 'scipy',
-    'matplotlib': 'matplotlib',
-    'sklearn': 'scikit-learn',
-})
+# checking package dependencies
+from dependencies import check_pkgs
+check_pkgs()
 
 import numpy as np
 import pandas as pd
@@ -16,10 +11,10 @@ import matplotlib.pyplot as plt
 
 from TSindex import tempsil
 from scipy.spatial import distance_matrix
-from sklearn.datasets import make_blobs, make_classification
+from sklearn.datasets import make_blobs
 import sys
 
-c  = int(sys.argv[1])
+c  = float(sys.argv[1])
 
 def get_label(A,C):
     M = distance_matrix(A,C)
@@ -107,11 +102,11 @@ def make_data(case):
         t = np.arange(len(y))/200
         X = X.flatten()
         X[y==1] = X[y==1] + t[y==1]  
-        X[y==2] = X[y==2] + 4  
+        X[y==2] = X[y==2] + 2.5  
         X = X.reshape((len(X),1))
 
     elif case==3:
-        X1, y1 = make_blobs(n_samples=250, centers=1, cluster_std=0.2, n_features=1, random_state=0)
+        X1, y1 = make_blobs(n_samples=250, centers=1, cluster_std=0.15, n_features=1, random_state=0)
         y1 += 2 # 0s are for outliers if any
         X2, y2 = X1+2, y1+1
         X1, X2 = X1.flatten(), X2.flatten()
@@ -210,10 +205,10 @@ def make_data(case):
         X[t] = X[i]
 
     else:
-        X1, y1 = make_blobs(n_samples=150, centers=1, cluster_std=0.2, n_features=1, random_state=0)
+        X1, y1 = make_blobs(n_samples=150, centers=1, cluster_std=0.25, n_features=1, random_state=0)
         y1 += 1
         X2, y2 = X1+3, y1+1
-        X3, y3 = make_blobs(n_samples=50, centers=1, cluster_std=0.2, n_features=1, random_state=0)
+        X3, y3 = make_blobs(n_samples=50, centers=1, cluster_std=0.20, n_features=1, random_state=0)
         X3, y3 = X3 + 1.5, y3+3
         X = np.concatenate((X1, X2, X3, X1), axis=0)
         y = np.concatenate((y1, y2, y3, y1), axis=0)
@@ -226,7 +221,7 @@ def make_data(case):
     return X,y,t
 
 def evaluate(t,X,y,c,text):
-    _,c,ts = tempsil(t,X,y,s=100,kn=200,c=c)
+    _,c,ts = tempsil(t,X,y,s=100,kn=500,c=c)
     print("%s TS: %.3f" % (text, ts))
 
 
@@ -304,14 +299,8 @@ plot_scatter(axs, 11, t, X, y)
 
 print("\nTemporal Silhouette (TS) adjusted with sigma (c)=",c) 
 
-#fig.suptitle('Different types of concept drift and outliers (x-axis: time,  y-axis: 1D-data)', fontsize=16)
+fig.suptitle('Different types of concept drift and outliers (x-axis: time,  y-axis: 1D-data)', fontsize=16)
 plt.tight_layout()
 #plt.savefig("toy_tests.pdf")
 plt.show()
-
-
-
-
-
-
 

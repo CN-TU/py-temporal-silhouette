@@ -2,7 +2,7 @@
 
 import numpy as np
 import pandas as pd
-from scipy.spatial import distance, distance_matrix
+from scipy.spatial import distance
 from scipy.stats import median_abs_deviation
 
 def temp_centroid_coherence(X):
@@ -10,13 +10,17 @@ def temp_centroid_coherence(X):
     d = A-B
     d = np.linalg.norm(d, axis=1)
     if len(d):
-        return mad(d,False)/len(d)
+        return mad(d,False)
     else:
         return 0
 
-def dist2oc(x,M):
+def dist2oc(x,M,l):
     d = distance.cdist(M,x)
-    return np.median(d)
+    clus = np.unique(l)
+    meandclus = np.inf * np.ones(len(clus))
+    for i,c in enumerate(clus):
+        meandclus[i] = np.mean(d[l==c])
+    return np.min(meandclus)
 
 def find_knearest(x, v, k, option='nearest'):
     x=x.flatten()
@@ -61,7 +65,7 @@ def tempsil(t,x,l,s=200,kn=200,c=1):
         tl1 = np.roll(tl0,-1)
         dtl = (tl1-tl0)[:-1]
         xk = x[l==label,:]
-        IAD = xk.shape[0] / (xk.shape[0] + c * mad(dtl,True))
+        IAD = 1 / (1 + c * mad(dtl,True)/xk.shape[0])
         wj = np.argwhere(l==label)
         wnt = np.argwhere(l!=label)
         SMA = np.zeros(xk.shape)
@@ -71,17 +75,18 @@ def tempsil(t,x,l,s=200,kn=200,c=1):
         a = np.zeros(len(SMA))
         b = np.zeros(len(SMA))
         for j in range(len(SMA)-1):
-            a[j] = 2 * distance.euclidean(xk[j],SMA[j])
+            a[j] =  distance.euclidean(xk[j],SMA[j])
             tst[j] = 0
             if len(wnt)>0:
                 m = find_knearest(wnt,wj[j],kn,option='nearest')
-                b[j] = dist2oc([xk[j]],x[m,:])
+                b[j] = dist2oc([xk[j]],x[m,:],l[m])
                 tst[j] = (b[j] - a[j])/np.max([a[j],b[j]])
-        TCD = temp_centroid_coherence(SMA)
-        ts[i] = np.mean(tst) * IAD * (1 - TCD)
+        TCD = temp_centroid_coherence(SMA)/xk.shape[0]
+        ts[i] = (1 + np.mean(tst)) * IAD * (1 - TCD) - 1
     _,card = np.unique(l,return_counts=True)
-    ts2 = np.power(ts,2)
-    TS = np.sqrt(np.sum(card*ts2)/np.sum(card))
+    ts2 = np.power(ts,2) * np.sign(ts)
+    TS2 = np.sum(card*ts2)/np.sum(card)
+    TS = np.sqrt(np.abs(TS2)) * np.sign(TS2)
     return k,ts2,TS
 
 
