@@ -35,7 +35,6 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # if no parameters are provided, the script will be run with these configurations
 DEFAULT_RUNS = '''
-dataS/sequential/arff results/ seq-p phase
 dataS/base/arff results/ base normal
 dataS/base/arff results/ base-r remove
 dataS/moving/arff results/ mov normal
@@ -45,6 +44,7 @@ dataS/nonstat/arff results/ nonst-r remove
 dataS/nonstat/arff results/ nonst-p phase
 dataS/sequential/arff results/ seq normal
 dataS/sequential/arff results/ seq-r remove
+dataS/sequential/arff results/ seq-p phase
 '''
 
 
