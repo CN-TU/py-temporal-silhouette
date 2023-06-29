@@ -80,15 +80,6 @@ for dataset in datasets:
 dfout.loc['all',:]= dfout.sum(axis=0)
 print(dfout)
 
-outfile_csv = '../results/res_comp_synth_'+best+'.csv'
-print("Summary csv file:",outfile_csv)
-dfout.to_csv(outfile_csv, sep=',', mode='w', header=False)
-
-outfile_tex = '../results/res_comp_synth_'+best+'.tex'
-print("Summary tex file:",outfile_tex,"\n")
-dfout.to_latex(outfile_tex, float_format="%.2f" )
-
-
 r=1 if best == 'gt' else 0 
 
 fig = plt.figure(figsize=(15,5))
