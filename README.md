@@ -124,9 +124,9 @@ For a comparison with the best clustering according to external validation (AMI)
 
         $ python3 utils/compare_results.py results/results_synthetic.csv ami
 
-### 5. Plotting peformances for real data cases
+### 5. Plotting peformances of stream clustering for real data cases
 
-To visualize performances of real data cases, run:
+To visualize the performances of the stream clustering algorithms used in real data cases, run:
 
         $ python3 utils/plots_retail.py dataR/retail.arff results/retail_labels.csv 
 
