@@ -8,9 +8,7 @@
 
 The TS index and the experiments here implemented are from the paper:
 
-*Temporal Silhouette: Validation of Stream Clustering Robust to Concept Drift* (under review...)
-
-*Jun., 2023*
+> Iglesias Vázquez, F., Zseby, T. Temporal silhouette: validation of stream clustering robust to concept drift. Mach Learn (2023). https://doi.org/10.1007/s10994-023-06462-2
 
 If you use Temporal Silhouette and/or the experiments described here, please cite the repository and the paper (when published).
 
